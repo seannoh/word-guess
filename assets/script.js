@@ -8,6 +8,9 @@ var hiddenWord = "password"
 var currentGuess = ""
 var guessedLetters = []
 var secondsLeft = 10
+var winCount = 0
+var lossCount = 0
+var gameOver = false
 
 function chooseWord(){
     hiddenWord = posWords[Math.floor(Math.random() * (posWords.length - 1))]
@@ -33,21 +36,30 @@ function updateGuess(){
         }
     }
     currentGuess = str
+    if(currentGuess == hiddenWord && secondsLeft > 0){
+        winCount++
+        gameOver = true
+        scoreUpdate()
+    }
     displayWord();
 }
 
 document.addEventListener("keypress", function(event) {
-  var keyPressed = event.key.toLowerCase();
-  if(!(guessedLetters.includes(keyPressed))) {
-    guessedLetters.push(keyPressed);
-    console.log(keyPressed);
-  }  
-  console.log(guessedLetters);
-  updateGuess();
-
+    if(gameOver==false){
+        var keyPressed = event.key.toLowerCase();
+        if(!(guessedLetters.includes(keyPressed))) {
+            guessedLetters.push(keyPressed);
+            console.log(keyPressed);
+        }  
+        console.log(guessedLetters);
+        updateGuess();
+    }
 })
 
 newWordBtn.addEventListener("click",function(){
+    gameOver = false
+    guessedLetters = []
+    secondsLeft = 10
     chooseWord()
     initTimer()
 })
@@ -56,9 +68,34 @@ function initTimer(){
     var timerInterval = setInterval(function() {
         if(secondsLeft > 0){
             secondsLeft--
-            timer.textContent = secondsLeft
+            if(gameOver){
+                timer.textContent = "You Win"
+            } else {
+                timer.textContent = secondsLeft
+            }
         } else {
+            
             clearInterval(timerInterval)
+            if(gameOver==true){
+                lossCount++
+                timer.textContent = "You Lose"
+            }
+            gameOver = true
+            scoreUpdate()
         }
     }, 1000)
 }
+
+function scoreUpdate(){
+    localStorage.setItem("wins",winCount)
+    localStorage.setItem("loses",lossCount)
+    displayScore()
+}
+
+function displayScore(){
+    wc = localStorage.getItem("wins")
+    lc = localStorage.getItem("loses")
+    scoreBoard.textContent = "W: " + wc + " L: " + lc
+}
+
+displayScore()
