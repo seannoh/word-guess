@@ -2,6 +2,7 @@ var scoreBoard = document.getElementById("score")
 var timer = document.getElementById("timer")
 var hiddenText = document.getElementById("hidden-word")
 var newWordBtn = document.getElementById("new-word-btn")
+var endGameMsg = document.getElementById("end-game-msg")
 
 var posWords = ["computer","test","people","phone","mouse"]
 var hiddenWord = "password"
@@ -22,7 +23,6 @@ function displayWord(){
     for(var i = 0; i < currentGuess.length; i++){
         showString += currentGuess.charAt(i) + " "
     }
-    console.log(showString);
     hiddenText.textContent = showString
 }
 
@@ -36,11 +36,7 @@ function updateGuess(){
         }
     }
     currentGuess = str
-    if(currentGuess == hiddenWord && secondsLeft > 0){
-        winCount++
-        gameOver = true
-        scoreUpdate()
-    }
+    endGame();
     displayWord();
 }
 
@@ -49,9 +45,7 @@ document.addEventListener("keypress", function(event) {
         var keyPressed = event.key.toLowerCase();
         if(!(guessedLetters.includes(keyPressed))) {
             guessedLetters.push(keyPressed);
-            console.log(keyPressed);
         }  
-        console.log(guessedLetters);
         updateGuess();
     }
 })
@@ -60,6 +54,7 @@ newWordBtn.addEventListener("click",function(){
     gameOver = false
     guessedLetters = []
     secondsLeft = 10
+    endGameMsg.style.display = "none";
     chooseWord()
     initTimer()
 })
@@ -68,22 +63,28 @@ function initTimer(){
     var timerInterval = setInterval(function() {
         if(secondsLeft > 0){
             secondsLeft--
-            if(gameOver){
-                timer.textContent = "You Win"
-            } else {
-                timer.textContent = secondsLeft
-            }
+            timer.textContent = secondsLeft
         } else {
-            
             clearInterval(timerInterval)
-            if(gameOver==true){
-                lossCount++
-                timer.textContent = "You Lose"
-            }
-            gameOver = true
-            scoreUpdate()
+            endGame();
         }
     }, 1000)
+}
+
+function endGame() {
+    endGameMsg.style.display = "block";
+    if(currentGuess == hiddenWord && secondsLeft > 0){
+        winCount++
+        gameOver = true
+        endGameMsg.textContent = "You Win"
+        scoreUpdate()
+    } else if(currentGuess != hiddenWord && secondsLeft === 0){
+        lossCount++
+        gameOver = true
+        endGameMsg.textContent = "You Lose"
+        scoreUpdate()
+    }
+
 }
 
 function scoreUpdate(){
