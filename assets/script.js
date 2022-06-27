@@ -7,9 +7,11 @@ var posWords = ["computer","test","people","phone","mouse"]
 var hiddenWord = "password"
 var currentGuess = ""
 var guessedLetters = []
+var secondsLeft = 10
 
 function chooseWord(){
-    var hiddenWord = posWords[Math.floor(Math.random() * (posWords.length - 1))]
+    hiddenWord = posWords[Math.floor(Math.random() * (posWords.length - 1))]
+    updateGuess()
 }
 
 function displayWord(){
@@ -44,3 +46,19 @@ document.addEventListener("keypress", function(event) {
   updateGuess();
 
 })
+
+newWordBtn.addEventListener("click",function(){
+    chooseWord()
+    initTimer()
+})
+
+function initTimer(){
+    var timerInterval = setInterval(function() {
+        if(secondsLeft > 0){
+            secondsLeft--
+            timer.textContent = secondsLeft
+        } else {
+            clearInterval(timerInterval)
+        }
+    }, 1000)
+}
