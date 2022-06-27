@@ -4,7 +4,7 @@ var hiddenWord = document.getElementById("hidden-word")
 var newWordBtn = document.getElementById("new-word-btn")
 
 var posWords = ["computer","test","people","phone","mouse"]
-var hiddenWord = "                           "
+var hiddenWord = "password"
 var currentGuess = ""
 var guessedLetters = []
 
@@ -18,5 +18,17 @@ function displayWord(){
         showString += currentGuess.charAt(i) + " "
     }
     hiddenWord.textContent = showString
+}
+
+function updateGuess(){
+    var str = ""
+    for(var i = 0; i < hiddenWord.length; i++){
+        if(hiddenWord.charAt(i) in guessedLetters){
+            str += hiddenWord.charAt(i)
+        } else {
+            str += "_"
+        }
+    }
+    currentGuess = str
 }
 
