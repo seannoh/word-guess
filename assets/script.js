@@ -31,7 +31,10 @@ function initGame(){
 function initTimer(){
   timer.textContent = secondsLeft
   var timerInterval = setInterval(function() {
-      if(secondsLeft === 0 || gameOver){
+      if(gameOver){
+        clearInterval(timerInterval)
+      }
+      if(secondsLeft === 0){
           clearInterval(timerInterval)
           endGame();
       } else {
@@ -102,9 +105,9 @@ function scoreUpdate(){
 }
 
 function displayScore(){
-    wc = localStorage.getItem("wins")
-    lc = localStorage.getItem("loses")
-    scoreBoard.textContent = "W: " + wc + " L: " + lc
+    winCount = localStorage.getItem("wins")
+    lossCount = localStorage.getItem("loses")
+    scoreBoard.textContent = "W: " + winCount + " L: " + lossCount
 }
 
 displayScore()
