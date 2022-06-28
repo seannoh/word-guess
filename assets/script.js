@@ -107,6 +107,10 @@ function scoreUpdate(){
 function displayScore(){
     winCount = localStorage.getItem("wins")
     lossCount = localStorage.getItem("loses")
+    if(!winCount || !lossCount){
+      winCount = 0;
+      lossCount = 0;
+    }
     scoreBoard.textContent = "W: " + winCount + " L: " + lossCount
 }
 
