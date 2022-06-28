@@ -45,7 +45,7 @@ function initTimer(){
 }
 
 function chooseWord(){
-    hiddenWord = posWords[Math.floor(Math.random() * (posWords.length - 1))]
+    hiddenWord = posWords[Math.floor(Math.random() * (posWords.length))]
     updateGuess()
 }
 

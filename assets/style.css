@@ -9,3 +9,7 @@ main {
   align-items: center;
   flex-direction: column;
 }
+
+h1 {
+  margin: auto;
+}
